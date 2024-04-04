@@ -1,0 +1,11 @@
+const os = require("os")
+
+// console.log(os.cpus())
+// console.log('platform:',os.platform())
+// console.log('release:', os.release())
+// console.log('Hostname:', os.hostname())
+// console.log('CPUs:',os.cpus())
+// console.log('Total Memory :', os.totalmem()/1024/1024,'MB')
+// console.log('Free Memory:', os.freemem()/1024/1024,'MB')
+// console.log('Network Interface:', os.networkInterfaces())
+console.log('constats:', os.constants)
