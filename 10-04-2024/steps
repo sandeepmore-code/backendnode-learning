@@ -1,0 +1,17 @@
+1.
+install package.json.
+npm init-y
+
+2. Create index.js file.
+
+3. npm i express.
+install express.
+
+4. setup express in index.js
+
+5.
+npm i nodemon
+install nodemon to restart server
+
+6.
+create script inside pacakage.json and use nodemon

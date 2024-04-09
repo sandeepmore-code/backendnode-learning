@@ -17,23 +17,23 @@
 // });
 
 
-const http = require("http")
+// const http = require("http")
 
-const server = http.createServer((req,res)=>{
-  conso-le.log(req,"req");
-  if(req.method === "GET"&& req.url === "/Home"){
-    res.end("Home");
-  }else if (req.method === "GET" && req.url === "/Register"){
-    res.end("Register");
-  }else if (req.method === "GET" && req.url === "/Login"){
-    res.end("Login");
-  }
-  else{
-    res.end("url undefined")
-  }
+// const server = http.createServer((req,res)=>{
+//   conso-le.log(req,"req");
+//   if(req.method === "GET"&& req.url === "/Home"){
+//     res.end("Home");
+//   }else if (req.method === "GET" && req.url === "/Register"){
+//     res.end("Register");
+//   }else if (req.method === "GET" && req.url === "/Login"){
+//     res.end("Login");
+//   }
+//   else{
+//     res.end("url undefined")
+//   }
 
-});
+// });
 
-server.listen(3000,()=>{
-  console.log("server listeing on port 3000");
-});
+// server.listen(3000,()=>{
+//   console.log("server listeing on port 3000");
+// });
