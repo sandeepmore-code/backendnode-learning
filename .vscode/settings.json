@@ -1,0 +1,12 @@
+{
+  "prettier.enable": true,
+  "editor.formatOnSave": false,
+  "prettier.embeddedLanguageFormatting": "auto",
+  "prettier.configPath": "",
+  "prettier.documentSelectors": [
+    "\"editor.formatOnSave\": true, \"javascript.format.enable\": true"
+  ],
+  "prettier.prettierPath": "\"editor.formatOnSave\": true, \"javascript.format.enable\": true",
+  "prettier.jsxSingleQuote": true,
+  "prettier.singleQuote": true
+}
