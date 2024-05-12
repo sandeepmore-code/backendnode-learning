@@ -45,13 +45,16 @@ export const Login = async(req,res) => {
       return res.json({sucess : false , message : "User not exist, please check your email."})
     }
 
-    bcrypt.compare(myPlaintextPassword, hash, function(err, result){
-     try{
+    console.log(user,"user");
 
-     }catch(error){
+    const isPasswordCorrect = await bcrypt.compare(password,user.password);
+    if(!isPasswordCorrect){
+      return res.json({sucess : false , message : "Password incorrect"})
+    }
 
-     }
-     });
+    return res.json({sucess : true, message : "login sucessfull"})
+
+    console.log( isPasswordCorrect,"isPasswordCorrect");
     res.send("login")
   }catch(error){
     return res.json({error,succes : false});
