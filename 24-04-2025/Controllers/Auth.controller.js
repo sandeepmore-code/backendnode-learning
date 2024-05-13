@@ -1,63 +1,58 @@
 import UserSchema from "../models/users.schema.js";
+import userSchema from "../models/users.schema.js";
 import bcrypt from "bcrypt";
 
 
 
 export const Register = async(req,res) => {
   try{
-    const {name, email, password, confirmpassword} = req.body;
-
-    if(!name || !email || !password){
-     return res.json({success : false, message : "please enter all fields"})
-    };
-
-    if(password !== confirmpassword){
-      return res.json({success : false, message : "Password doesnt match,please try again"});
-    };
-
-    const isEmailExists = await UserSchema.findOne({ email : email});
-    if(isEmailExists){
-      return res.json({succes : false, message : "email already exisit "})
+    const {name,email,password,confirmpassword} = req.body;
+    if(!name || !email || !password || !confirmpassword ){
+      return res.json({success : false, message : "All feilds are required"})
     }
-
-    const HashedPassword = await bcrypt.hash(password,10);
-    const newUser = new UserSchema({
+    if(password !== confirmpassword){
+      return res.json({success : false,message : "password not matched!, please Re-enter"});
+    }
+    const isEmailexsists= await userSchema.findOne({email : email});
+    console.log(isEmailexsists,"isEmailexists");
+    if(isEmailexsists){
+      return res.json({success : false, message: "Email already exist"})
+    }
+    const hashedPassword = await bcrypt.hash(password,10);
+    const newUser= new UserSchema({
       name : name,
       email : email,
-      password : HashedPassword,
-    })
-    await newUser.save();
-    return res.json({success : true, message : "Registration completed."});
+      password : hashedPassword,
+    });
+    await newUser.save(); 
+    return res.json({success : true, message : "registration completed."})
   }catch(error){
-    return res.json({error, success : false});
+    console.log(error)
+    return res.json({error,success: false,})
+ 
   }
-}
+  
+};
+   
 
 export const Login = async(req,res) => {
   try{
     const {email,password} = req.body;
-    if(!email || !password){
-      return res.json({succes : false,message : "All Fields are Required"});
-    };
-
-    const user = await UserSchema.findOne({email: email});
+    if(!email || !password ){
+      return res.json({success : false, message : "all Feilds are required"});
+    }
+    const user = await UserSchema.findOne({email : email})
     if(!user){
-      return res.json({sucess : false , message : "User not exist, please check your email."})
+      return res.json({
+        success : false,
+        message : "user not exist ,please check you email"
+      })
     }
-
-    console.log(user,"user");
-
-    const isPasswordCorrect = await bcrypt.compare(password,user.password);
-    if(!isPasswordCorrect){
-      return res.json({sucess : false , message : "Password incorrect"})
-    }
-
-    return res.json({sucess : true, message : "login sucessfull"})
-
-    console.log( isPasswordCorrect,"isPasswordCorrect");
-    res.send("login")
+    console.log(user,"user")
+    res.send("Login")
   }catch(error){
-    return res.json({error,succes : false});
+    return res.json({Success : false, error})
   }
-  
+
 };
+
