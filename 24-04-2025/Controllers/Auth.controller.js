@@ -1,20 +1,19 @@
 import UserSchema from "../models/users.schema.js";
-import userSchema from "../models/users.schema.js";
 import bcrypt from "bcrypt";
 
 
 
 export const Register = async(req,res) => {
   try{
-    const {name,email,password,confirmpassword} = req.body;
+    const {name,email,password,confirmpassword} = req.body.userData;
     if(!name || !email || !password || !confirmpassword ){
       return res.json({success : false, message : "All feilds are required"})
     }
     if(password !== confirmpassword){
       return res.json({success : false,message : "password not matched!, please Re-enter"});
     }
-    const isEmailexsists= await userSchema.findOne({email : email});
-    console.log(isEmailexsists,"isEmailexists");
+    const isEmailexsists= await UserSchema.findOne({email : email});
+    
     if(isEmailexsists){
       return res.json({success : false, message: "Email already exist"})
     }
@@ -46,10 +45,15 @@ export const Login = async(req,res) => {
       return res.json({
         success : false,
         message : "user not exist ,please check you email"
-      })
+      });
     }
-    console.log(user,"user")
-    res.send("Login")
+    console.log(user,"user");
+    const isPasswordCorrect = await bcrypt.compare(password,user.password);
+
+    if(!isPasswordCorrect){
+      return res.json({success:false,message : "please enter correct password"});
+    }
+    return res.json({success : true,message: "Login Successful"})
   }catch(error){
     return res.json({Success : false, error})
   }

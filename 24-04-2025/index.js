@@ -1,19 +1,22 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import AllRoutes from './routes/index.js'
+import AllRoutes from './routes/index.js';
+import cors from 'cors';
+
 
 
 const app = express();
 app.use(express.json());
 dotenv.config();
+app.use(cors());
 
 
 app.get("/",(req,res)=>{
   res.send("working..");
 });
 
-app.use('/api/v1', AllRoutes)
+app.use('/api/v1', AllRoutes);
 
 mongoose.connect(process.env.MONGODB_URL).then(()=>{
   console.log("DB Connected")
@@ -21,7 +24,7 @@ mongoose.connect(process.env.MONGODB_URL).then(()=>{
 
 app.listen(3000,()=>{
   console.log("port listing at 3000")
-});
+}); 
 
 // import express from "express";
 // import mongoose from "mongoose";
