@@ -7,7 +7,7 @@ import bcrypt from "bcrypt"
 
 export const Register = async(req,res) => {
   try{
-    const {name,email,password,confirmpassword} = req.body;
+    const {name,email,password,confirmpassword} = req.body.userData;
     if(!name || !email || !password || !confirmpassword){
       return res.json({success : false, message : "All feilds are required"})
     }
@@ -45,6 +45,12 @@ export const Login = async(req,res) => {
       return res.json({success : false,message : "User Not Exist ,please check your email"})
     }
     console.log(User , "User")
+
+    const isPasswordCorrect = await bcrypt.compare(password, User.password);
+    if(!isPasswordCorrect){
+      return res.json({success : false,message : "Password is incorrect"})
+    }
+    return res.json({success : true,message : " Login successful "})
   }catch(error){
     console.log(error,"error")
       return res.json({error,success : false})
