@@ -4,7 +4,8 @@
   name : String,
   category : String,
   price : Number,
-  quantity : Number
+  quantity : Number,
+  tags : [String]
  });
 
  const ProductSchema = mongoose.model("product",productSchema);
