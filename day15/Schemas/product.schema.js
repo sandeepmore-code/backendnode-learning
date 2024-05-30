@@ -5,7 +5,9 @@
   category : String,
   price : Number,
   quantity : Number,
-  tags : [String]
+  tags : [String],
+  user : { type :mongoose.Schema.Types.ObjectId,ref : "User" },
+  // payment : {type : mongoose.Schema.Types.ObjectId,ref : "payment"},
  });
 
  const ProductSchema = mongoose.model("product",productSchema);
