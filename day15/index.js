@@ -45,7 +45,7 @@ app.post("/add-product",async (req,res)=>{
   }
 })
 
-app.post("/get-product",async (req,res)=>{
+app.post("/get-products-by-category-price", async (req,res)=>{
 
       try{
         const { category, price} = req.body;
@@ -121,6 +121,16 @@ app.post("/register", async(req,res) => {
       return res.json({error,success : false})
   }
 });
+
+app.get("/get-products",async (req,res)=>{
+try{
+const products = await ProductSchema.find({});
+return res.json({success : true, products : products})
+}catch(error){
+  console.log(error,"error")
+      return res.json({error,success : false})
+}
+})
 
 mongoose.connect(process.env.MONGODB_URL).then(()=>{
   console.log("DB connected")
