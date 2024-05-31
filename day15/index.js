@@ -5,15 +5,21 @@ import ProductSchema from "./Schemas/product.schema.js";
 import UserSchema from "./Schemas/user.schema.js";
 import bcrypt from "bcrypt"
 import cors from "cors";
+import jwt from "jsonwebtoken"
+import cookieParser from 'cookie-parser';
+
+
 
 const app = express();
 var corsOptions = {
   origin : "http://localhost:3000",
   credentials : true
 };
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); 
 dotenv.config()
 app.use(express.json());
+
+app.use(cookieParser());
 
 
 
@@ -94,9 +100,9 @@ res.send(products);
     return res.json({success : false , error})
   }
 })
-app.post("/register", async(req,res) => {
+app.post("/register",async(req,res) => {
   try{
-    const  {name,email,password,confirmpassword} = req.body;
+    const {name,email,password,confirmpassword} = req.body.userData;
     if(!name || !email || !password || !confirmpassword){
       return res.json({success : false, message : "All feilds are required"})
     }
@@ -131,6 +137,57 @@ return res.json({success : true, products : products})
       return res.json({error,success : false})
 }
 })
+app.post('/login', async(req,res) => {
+  try{
+    const {email,password} = req.body.userData;
+    if( !email || !password){
+      return res.json({success : false, message : "All feilds are required"})
+    }
+    const User = await UserSchema.findOne({email : email})
+    if(!User){
+      return res.json({success : false,message : "User Not Exist ,please check your email"})
+    }
+    // console.log(User , "User")
+
+    const isPasswordCorrect = await bcrypt.compare(password, User.password);
+    if(!isPasswordCorrect){
+      return res.json({success : false,message : "Password is incorrect"})
+    }
+
+    const token = jwt.sign({id :User._id}, process.env.JWT_SECRET)
+    // console.log(token,"token");
+    res.cookie("token", token)
+    return res.json({success : true,message : " Login successful ", userData : User})
+
+  }catch(error){
+    console.log(error,"error")
+      return res.json({error,success : false})
+  }
+});
+app.get('/validate-token', async (req,res)=>{
+  try{
+  const token = req?.cookies?.token
+  console.log(token,"token");
+  
+  if(!token){
+    return res.json({success : false,message : "token not found"})
+  }
+  const decodedData = await jwt.verify(token,process.env.JWT_SECRET)
+  // console.log(decodedData);
+  if(!decodedData.id){
+    return res.json({success : false,message : "token is expired"})
+  }
+   const user = await UserSchema.findById(decodedData.id)
+  console.log(user)
+  if(!user){
+    return res.json({success : false,message : "token invalid"})
+  }
+  return res.json({user,success : true})
+  }catch(error){
+  console.log(error,"error")
+  return res.json({error,success : false})
+  }
+  });
 
 mongoose.connect(process.env.MONGODB_URL).then(()=>{
   console.log("DB connected")
@@ -138,5 +195,5 @@ mongoose.connect(process.env.MONGODB_URL).then(()=>{
 
 app.listen(3001,()=>{
   console.log("server listning on 3001")
-})
+});
 

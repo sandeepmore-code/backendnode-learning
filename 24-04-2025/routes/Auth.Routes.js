@@ -6,7 +6,7 @@ import { Login, Register, validateToken } from "../Controllers/Auth.controller.j
 const router =Router();
 
 router.post('/register',Register);
-router.post('/login',Login);
+app.post('/login',Login  );
 router.get('/validate-token',validateToken);
 
 export default router;
