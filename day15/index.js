@@ -24,7 +24,8 @@ app.get('/',(req,res)=>{
 
 app.post("/add-product",async (req,res)=>{
   try{
-    const {name, category ,price,quantity,tags,userid} = req.body;
+    const {name, category ,price,quantity,tags} = req.body.productData;
+    const {userid}= req.body;
     if(!name || !category || !price || !quantity || !tags || !userid){
       return res.json({success : false , Message : "All fields are required"})
     }
