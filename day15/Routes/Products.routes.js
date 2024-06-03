@@ -6,7 +6,7 @@ const router = Router();
 router.post("/add-product",addProduct);
 router.post("/get-products-by-category-price", getProductsByCategoryPrice);
 router.post("/get-products-by-seller",getProductsBySeller);
-router.post("/get-all-products",getAllProducts);
+router.get("/get-all-products",getAllProducts);
 
 export default router;
 

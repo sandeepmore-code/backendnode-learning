@@ -5,7 +5,7 @@ export const addProduct= async (req,res)=>{
   try{
     const {name, category ,price,quantity,tags} = req.body.productData;
     const {userid}= req.body;
-    if(!name || !category || !price || !quantity || !tags || !userid){
+    if(!name || !category || !price || !quantity || !tags || !userid ){
       return res.json({success : false , Message : "All fields are required"})
     }
     const newProduct = new ProductSchema({
@@ -51,8 +51,9 @@ const aggretation = [
 export const getProductsBySeller= async (req,res)=>{
   try{
   const {userId}= req.body;
+  console.log(userId,"User Id is here")
   const products = await ProductSchema.find({user : userId}).populate("user");
-  res.send(products); 
+  res.json({success : true ,products }); 
   }catch(error){
       return res.json({success : false , error})
     }
