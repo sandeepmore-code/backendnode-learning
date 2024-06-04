@@ -52,7 +52,7 @@ export const login= async(req,res) => {
     const token = jwt.sign({id :User._id}, process.env.JWT_SECRET)
     // console.log(token,"token");
     res.cookie("token", token)
-    return res.json({success : true,message : " Login successful ", userData : {name: User.name, email: User.email, role: User.role }})
+    return res.json({success : true,message : " Login successful ", userData : {name: User.name, email: User.email, role: User.role , _id: User._id}})
 
   }catch(error){
     console.log(error,"error")
@@ -94,3 +94,71 @@ export const Logout = async (req,res)=>{
   return res.json({error,success : false})
   }
 }
+
+export const addToCart = async (req,res)=>{
+  try {
+    const { userid, productId } = req.body;
+    console.log(userid, productId);
+    const user = await UserSchema.findByIdAndUpdate(
+      userid,
+      {
+        $addToSet: { cart: productId },
+      },
+      { new: true }
+    );
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+    console.log(user, "user");
+    return res.json({
+      success: true,
+      message: "Product successfully added to cart.",
+    });
+  } catch (error) {
+    console.log(error, "error");
+    return res.json({ error, success: false });
+  }
+};
+
+export const addTowhishlist = async (req,res)=>{
+  try {
+    const { userid, productId } = req.body;
+    console.log(userid, productId);
+    const user = await UserSchema.findById(
+      userid,
+      {
+        $addToSet: { Wishlist : productId },
+      },
+      { new: true }
+    );
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+    console.log(user, "user");
+    return res.json({
+      success: true,
+      message: "Product successfully added to cart.",
+    });
+  } catch (error) {
+    console.log(error, "error");
+    return res.json({ error, success: false });
+  }
+};
+
+export const getCartProducts = async (req, res) => {
+  try {
+    const { userid } = req.params;
+
+    const user = await UserSchema.findById(userid).populate("cart");
+    if (!user) {
+      return res.json({ success: false, message: "User not found." });
+    }
+
+    return res.json({ success: true, cart: user.cart });
+  } catch (error) {
+    console.log(error, "error");
+    return res.json({ error, success: false });
+  }
+};
+
+
