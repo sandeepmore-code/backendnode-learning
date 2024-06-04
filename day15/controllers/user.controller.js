@@ -149,12 +149,33 @@ export const getCartProducts = async (req, res) => {
   try {
     const { userid } = req.params;
 
-    const user = await UserSchema.findById(userid).populate("cart");
+    const user = await UserSchema.findByIdAndUpdate(userid).populate("cart");
     if (!user) {
       return res.json({ success: false, message: "User not found." });
     }
 
     return res.json({ success: true, cart: user.cart });
+  } catch (error) {
+    console.log(error, "error");
+    return res.json({ error, success: false });
+  }
+};
+
+export const checkout = async (req, res) => {
+  try {
+    const { userid } = req.body;
+
+    const user = await UserSchema.findByIdAndUpdate(
+      userid,
+      { $set: { cart: [] } },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.json({ success: false, message: "User not found." });
+    }
+
+    return res.json({ success: true, message: "Items successfully checked out." });
   } catch (error) {
     console.log(error, "error");
     return res.json({ error, success: false });
