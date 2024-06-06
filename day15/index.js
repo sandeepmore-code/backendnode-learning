@@ -12,7 +12,7 @@ import AllRoutes from "./Routes/index.js"
 
 const app = express();
 var corsOptions = {
-  origin : ["http://localhost:3000","https://myntra.com"],
+  origin : ["http://localhost:3000","https://myntra.com", "https://react-1-three-alpha.vercel.app/login", ],
   credentials : true
 };
 app.use(cors(corsOptions)); 
