@@ -24,8 +24,8 @@ app.use(cookieParser());
 
 
 
-app.get('/',(req,res)=>{
-  res.send("working....")
+app.get('/', (req, res) => {
+  res.send("working....");
 });
 
 app.use('/api/v1',AllRoutes)
